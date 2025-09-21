@@ -14,11 +14,20 @@ float findHighestGrade(float mathGrade, float scienceGrade, float englishGrade, 
     float highest = mathGrade;
     subjectName = "Math"; // Default assumption
 
-    if (scienceGrade > highest) { highest = scienceGrade; subjectName = "Science"; }
-    if (englishGrade > highest) { highest = englishGrade; subjectName = "English"; }
-    if (historyGrade > highest) { highest = historyGrade; subjectName = "History"; }
-    if (artGrade > highest) { highest = artGrade; subjectName = "Art"; }
-
+    if (scienceGrade > highest) { 
+        highest = scienceGrade; 
+        subjectName = "Science"; 
+    } else if (englishGrade > highest) { 
+        highest = englishGrade; 
+        subjectName = "English"; 
+    } else if (historyGrade > highest) { 
+        highest = historyGrade;
+        subjectName = "History"; 
+    } else if (artGrade > highest) { 
+        highest = artGrade; 
+        subjectName = "Art"; 
+    } 
+    
     return highest;
 }
 
@@ -27,51 +36,81 @@ float findLowestGrade(float mathGrade, float scienceGrade, float englishGrade, f
     float lowest = mathGrade;
     subjectName = "Math"; // Default assumption
 
-    if (scienceGrade < lowest) { lowest = scienceGrade; subjectName = "Science"; }
-    if (englishGrade < lowest) { lowest = englishGrade; subjectName = "English"; }
-    if (historyGrade < lowest) { lowest = historyGrade; subjectName = "History"; }
-    if (artGrade < lowest) { lowest = artGrade; subjectName = "Art"; }
-
+    if (scienceGrade < lowest) { 
+        lowest = scienceGrade; 
+        subjectName = "Science"; 
+    } else if (englishGrade < lowest) { 
+        lowest = englishGrade; 
+        subjectName = "English"; 
+    } else if (historyGrade < lowest) { 
+        lowest = historyGrade; 
+        subjectName = "History"; 
+    } else if (artGrade < lowest) { 
+        lowest = artGrade; 
+        subjectName = "Art"; 
+    } 
+        
     return lowest;
 }
 
 // Converts average grade into grade equivalent
 float getGrade(float average) {
-    if (average >= 96) return 1.00;
-    if (average >= 94) return 1.25;
-    if (average >= 92) return 1.50;
-    if (average >= 90) return 1.75;
-    if (average >= 88) return 2.00;
-    if (average >= 86) return 2.25;
-    if (average >= 84) return 2.50;
-    if (average >= 82) return 2.75;
-    if (average >= 80) return 3.00;
-    return 5.00;
+
+    if (average >= 96) {
+        return 1.00;    // 96-100
+    } else if (average >= 94) {
+        return 1.25;    // 94-95
+    } else if (average >= 92) { 
+        return 1.50;    // 92-93
+    } else if (average >= 90) {
+        return 1.75;    // 90-91
+    } else if (average >= 88) {
+        return 2.00;    // 88-89
+    } else if (average >= 86) {
+        return 2.25;    // 86-87
+    } else if (average >= 84) {
+        return 2.50;    // 84-85
+    } else if (average >= 82) {
+        return 2.75;    // 82-83
+    } else if (average >= 80) {
+        return 3.00;    // 80-81
+    } else {
+        return 5.00;    // Below 80
+    }
 }
 
 // Counts how many subjects are passing (≥60)
 int countPassing(float mathGrade, float scienceGrade, float englishGrade, float historyGrade, float artGrade) {
     int count = 0;
+
     if (mathGrade >= 60) count++;
     if (scienceGrade >= 60) count++;
     if (englishGrade >= 60) count++;
     if (historyGrade >= 60) count++;
     if (artGrade >= 60) count++;
+
     return count;
 }
 
 // Calculates general weighted average
 float getGWA(float average) {
-    if (average >= 96) return 1.0;
-    if (average < 80) return 5.0;
-    return 1.0 + (96.0 - average) * (4.0 / 16.0);
+    if (average >= 96) {
+        return 1.0;    // Highest Grade
+    } else if (average < 80) 
+        return 5.0;    // Below Passing
+
+    // Linear interpolation between 96 (1.00) and 80 (5.00)
+    return 1.0 + (96.0 - average) * 0.25; // Formula 
 }
 
 // Checks if student qualifies for Director's list
 void checkDirectorsList(float gwa) {
     cout << "Director's List Status: ";
-    if (gwa <= 1.5) cout << "YES (Congratulations!)" << endl;
-    else cout << "NO" << endl;
+    if (gwa <= 1.50) {
+        cout << "YES (Congratulations!)" << endl;
+    } else {
+    cout << "NO" << endl;
+    }
 }
 
 // Validate grade input (0–100)
@@ -87,11 +126,12 @@ float validateGradeInput(string subjectName) {
 }
 
 
-
 // Main Program
 int main() {
-    string studentName, studentID, gradeLevel;
-    int studentAge, birthYear;
+
+    // Declare variables
+    string studentName, studentID;
+    int studentAge, birthYear, gradeLevel;
 
     cout << "========================================" << endl;
     cout << "       STUDENT GRADE CALCULATOR" << endl;
@@ -99,14 +139,14 @@ int main() {
 
     cout << "=== STUDENT PROFILE SETUP ===" << endl;
     cout << "Enter student name: ";
-    getline(cin, studentName);
+    getline(cin, studentName); // Getline allows spaces in user input
     cout << "Enter student ID: ";
-    getline(cin, studentID);
+    getline(cin, studentID); // Getline allows spaces in user input
     cout << "Enter student age: ";
     cin >> studentAge;
-    cin.ignore();
+    cin.ignore(); // Clears leftover input, allows getline to work properly
     cout << "Enter grade level: ";
-    getline(cin, gradeLevel);
+    cin >> gradeLevel;
     cout << endl << "Profile created successfully!" << endl;
 
     birthYear = 2025 - studentAge;
@@ -127,7 +167,18 @@ int main() {
     cout << "Name: " << studentName << endl;
     cout << "ID: " << studentID << endl;
     cout << "Age: " << studentAge << " years old" << endl;
-    cout << "Grade Level: " << gradeLevel << endl;
+    
+    // Add suffix when printing grade level
+    cout << "Grade Level: ";
+    if (gradeLevel == 1) {
+        cout << "1st grade";
+    } else if (gradeLevel == 2) {
+        cout << "2nd grade";
+    } else if (gradeLevel == 3) {
+        cout << "3rd grade";
+    } else 
+        cout << gradeLevel << "th grade" << endl;
+        
     cout << "Birth Year: " << birthYear << endl << endl;
 
     cout << "SUBJECT GRADES:" << endl;
@@ -163,4 +214,5 @@ int main() {
 
     cout << "========================================" << endl;
     return 0;
+
 }
