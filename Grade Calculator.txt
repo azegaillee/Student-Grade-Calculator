@@ -171,11 +171,11 @@ int main() {
     // Add suffix when printing grade level
     cout << "Grade Level: ";
     if (gradeLevel == 1) {
-        cout << "1st grade";
+        cout << "1st grade" << endl;
     } else if (gradeLevel == 2) {
-        cout << "2nd grade";
+        cout << "2nd grade" << endl;
     } else if (gradeLevel == 3) {
-        cout << "3rd grade";
+        cout << "3rd grade" << endl;
     } else 
         cout << gradeLevel << "th grade" << endl;
         
@@ -199,7 +199,7 @@ int main() {
     float gradeEquivalent = getGrade(averageGrade); 
     float gwa = getGWA(averageGrade);             
 
-    cout << fixed << setprecision(1);
+    cout << fixed << setprecision(2);
     cout << "Average Grade: " << averageGrade << "%" << endl;
     cout << "Grade Equivalent: " << gradeEquivalent << endl;
 
@@ -212,7 +212,7 @@ int main() {
     cout << "GWA: " << gwa << endl;
     checkDirectorsList(gwa);
 
-    cout << "========================================" << endl;
+    cout << endl << "========================================" << endl;
     return 0;
 
 }
