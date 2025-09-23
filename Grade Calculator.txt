@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -11,9 +12,11 @@ float calculateAverage(float mathGrade, float scienceGrade, float englishGrade, 
 
 // Finds highest grade and subject
 float findHighestGrade(float mathGrade, float scienceGrade, float englishGrade, float historyGrade, float artGrade, string &subjectName) {
-    float highest = mathGrade;
-    subjectName = "Math"; // Default assumption
 
+    float highest = mathGrade;
+    subjectName = "Math"; // Assume math is highest initially
+
+    // Updates subjectName with the subject that has the highest grade
     if (scienceGrade > highest) { 
         highest = scienceGrade; 
         subjectName = "Science"; 
@@ -33,9 +36,11 @@ float findHighestGrade(float mathGrade, float scienceGrade, float englishGrade, 
 
 // Finds lowest grade and subject
 float findLowestGrade(float mathGrade, float scienceGrade, float englishGrade, float historyGrade, float artGrade, string &subjectName) {
-    float lowest = mathGrade;
-    subjectName = "Math"; // Default assumption
 
+    float lowest = mathGrade;
+    subjectName = "Math"; // Assume math is lowest initially
+
+    // Updates subjectName with the subject that has the lowest grade
     if (scienceGrade < lowest) { 
         lowest = scienceGrade; 
         subjectName = "Science"; 
@@ -75,12 +80,15 @@ float getGrade(float average) {
     } else if (average >= 80) {
         return 3.00;    // 80-81
     } else {
-        return 5.00;    // Below 80
+        return 5.00;    // Below 80 (failing)
     }
 }
 
 // Counts how many subjects are passing (≥60)
-int countPassing(float mathGrade, float scienceGrade, float englishGrade, float historyGrade, float artGrade) {
+int countPassing(
+    float mathGrade, float scienceGrade, 
+    float englishGrade, float historyGrade, 
+    float artGrade) {
     int count = 0;
 
     if (mathGrade >= 60) count++;
@@ -116,13 +124,19 @@ void checkDirectorsList(float gwa) {
 // Validate grade input (0–100)
 float validateGradeInput(string subjectName) {
     float grade;
-    do {
+    while (true) {
         cout << "Enter " << subjectName << " grade (0-100): ";
         cin >> grade;
-        if (grade < 0 || grade > 100)
-            cout << "Invalid grade. Please enter a value between 0 and 100." << endl << endl;
-    } while (grade < 0 || grade > 100);
-    return grade;
+        
+        if (cin.fail() || grade < 0 || grade > 100) {
+            cin.clear();    // Resets error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');      // Discards invalid input
+            cout << "Invalid input. Please enter a value between 0 and 100." << endl << endl;
+        } else {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');      // Clears leftover input
+            return grade;
+        }
+    }
 }
 
 
@@ -132,37 +146,45 @@ int main() {
     // Declare variables
     string studentName, studentID;
     int studentAge, birthYear, gradeLevel;
-
+    
+    // Program header
     cout << "========================================" << endl;
     cout << "       STUDENT GRADE CALCULATOR" << endl;
     cout << "========================================" << endl << endl;
-
+    
+    // Input student profile
     cout << "=== STUDENT PROFILE SETUP ===" << endl;
     cout << "Enter student name: ";
-    getline(cin, studentName); // Getline allows spaces in user input
+    getline(cin, studentName); // Allows spaces in user input
     cout << "Enter student ID: ";
-    getline(cin, studentID); // Getline allows spaces in user input
+    getline(cin, studentID); // Allows spaces in user input
     cout << "Enter student age: ";
     cin >> studentAge;
-    cin.ignore(); // Clears leftover input, allows getline to work properly
+    cin.ignore(); // Clears leftover input
     cout << "Enter grade level: ";
     cin >> gradeLevel;
     cout << endl << "Profile created successfully!" << endl;
-
+    
+    // Calculates birth year (assume current year is 2025)
     birthYear = 2025 - studentAge;
 
     cout << endl << "=== GRADE ENTRY ===" << endl;
+    
+    // Calls the input validation function
     float mathGrade = validateGradeInput("Math");
     float scienceGrade = validateGradeInput("Science");
     float englishGrade = validateGradeInput("English");
     float historyGrade = validateGradeInput("History");
     float artGrade = validateGradeInput("Art");
+    
     cout << endl << "Grades recorded successfully!" << endl;
 
+    // Report card header
     cout << endl << "========================================" << endl;
     cout << "        STUDENT REPORT CARD" << endl;
     cout << "========================================" << endl << endl;
-
+    
+    // Prints student information
     cout << "STUDENT INFORMATION:" << endl;
     cout << "Name: " << studentName << endl;
     cout << "ID: " << studentID << endl;
@@ -178,36 +200,45 @@ int main() {
         cout << "3rd grade" << endl;
     } else 
         cout << gradeLevel << "th grade" << endl;
-        
+    
     cout << "Birth Year: " << birthYear << endl << endl;
-
+    
+    // Prints grades
     cout << "SUBJECT GRADES:" << endl;
-    cout << fixed << setprecision(1);
+    cout << fixed << setprecision(1);   // Show 1 decimal place for percentages
     cout << "Math: " << mathGrade << "%" << endl;
     cout << "Science: " << scienceGrade << "%" << endl;
     cout << "English: " << englishGrade << "%" << endl;
     cout << "History: " << historyGrade << "%" << endl;
     cout << "Art: " << artGrade << "%" << endl << endl;
-
+    
     cout << "GRADE STATISTICS:" << endl;
+    
+    // Calculates average grade
     float averageGrade = calculateAverage(mathGrade, scienceGrade, englishGrade, historyGrade, artGrade);
 
+    // Finds highest and lowest grade
     string highestSubject, lowestSubject;
     float highest = findHighestGrade(mathGrade, scienceGrade, englishGrade, historyGrade, artGrade, highestSubject);
     float lowest = findLowestGrade(mathGrade, scienceGrade, englishGrade, historyGrade, artGrade, lowestSubject);
-
+    
+    // Calculates grade point equivalent and GWA
     float gradeEquivalent = getGrade(averageGrade); 
     float gwa = getGWA(averageGrade);             
-
-    cout << fixed << setprecision(2);
+    
+    // Prints average and equivalent with 2 decimals
+    cout << fixed << setprecision(2); // 
     cout << "Average Grade: " << averageGrade << "%" << endl;
     cout << "Grade Equivalent: " << gradeEquivalent << endl;
-
+    
+    // Prints highest and lowest with 1 decimal
     cout << fixed << setprecision(1);
     cout << "Highest Grade: " << highest << "% (" << highestSubject << ")" << endl;
     cout << "Lowest Grade: " << lowest << "% (" << lowestSubject << ")" << endl;
     cout << "Subjects Passing: " << countPassing(mathGrade, scienceGrade, englishGrade, historyGrade, artGrade) << " out of 5" << endl << endl;
-
+    
+    // Prints GWA with 3 decimals (for precision)
+    // Checks if student is in Director's List
     cout << fixed << setprecision(3);
     cout << "GWA: " << gwa << endl;
     checkDirectorsList(gwa);
@@ -216,4 +247,5 @@ int main() {
     return 0;
 
 }
+
 
